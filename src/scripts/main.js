@@ -10,8 +10,6 @@ const msgStart = document.querySelector('.message-start');
 const msgWin = document.querySelector('.message-win');
 const msgLose = document.querySelector('.message-lose');
 
-let firstMoveDone = false;
-
 function updateUI() {
   const state = game.getState();
   const flatState = state.flat();
@@ -41,15 +39,9 @@ function updateUI() {
     msgStart.classList.remove('hidden');
     startBtn.textContent = 'Start';
     startBtn.className = 'button start';
-    firstMoveDone = false;
   } else if (gameStatus === 'playing') {
-    if (firstMoveDone) {
-      startBtn.textContent = 'Restart';
-      startBtn.className = 'button restart';
-    } else {
-      startBtn.textContent = 'Start';
-      startBtn.className = 'button start';
-    }
+    startBtn.textContent = 'Restart';
+    startBtn.className = 'button restart';
   } else if (gameStatus === 'win') {
     msgWin.classList.remove('hidden');
     startBtn.textContent = 'Restart';
@@ -66,7 +58,6 @@ startBtn.addEventListener('click', () => {
     game.start();
   } else {
     game.restart();
-    firstMoveDone = false;
   }
   updateUI();
 });
@@ -84,8 +75,6 @@ document.addEventListener('keydown', (e) => {
 
   e.preventDefault();
 
-  const oldState = JSON.stringify(game.getState());
-
   if (e.key === 'ArrowLeft') {
     game.moveLeft();
   } else if (e.key === 'ArrowRight') {
@@ -94,12 +83,6 @@ document.addEventListener('keydown', (e) => {
     game.moveUp();
   } else if (e.key === 'ArrowDown') {
     game.moveDown();
-  }
-
-  const newState = JSON.stringify(game.getState());
-
-  if (oldState !== newState && !firstMoveDone) {
-    firstMoveDone = true;
   }
 
   updateUI();
